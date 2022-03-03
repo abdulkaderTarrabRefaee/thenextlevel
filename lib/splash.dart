@@ -27,8 +27,8 @@ class Splash extends State<SplashScreen>  {
             Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (BuildContext context) => const LangView())));
     var assetsImage = const AssetImage(
-        'images/logo.png'); //<- Creates an object that fetches an image.
-    var image = Image.network("https://nextlevelkw.com/wp-content/uploads/2022/01/logo-01-01.png",scale: 0.3,); //<- Creates a widget that displays an image.
+        'images/logo.png');
+    var image =Image.asset("images/logo.png");
     return  Scaffold(
 
       body: Container(
@@ -38,10 +38,13 @@ class Splash extends State<SplashScreen>  {
             gradient: LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
-                colors: [  Color(0xFF00a99d), Color(0xFF29abe2)],transform: GradientRotation(35.0))
+                colors: [  Color(0xFFECECEC), Color(0x005c5c5c)],transform: GradientRotation(35.0))
         ),
         child: Center(
-          child: image,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: image,
+          ),
         ),
       ),
     );

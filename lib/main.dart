@@ -2,6 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:thenextlevel/splash.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+
+import 'dart:async';
+
+import 'dart:io';
+
+
 
 void main() => runApp(const MyApp());
 
@@ -26,6 +34,24 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen>
 {
+  late String appName="";
+  late  String mainPage ="";
+  late  String aboutUs ="";
+  late   String courses ="";
+  late  String shop ="";
+  late  String contact ="";
+
+  late  String aboutUsUrl ="";
+  late   String coursesUrl ="";
+  late  String shopUrl ="";
+  late  String contactUrl ="";
+
+
+
+
+
+
+
   String url="https://nextlevelkw.com";
   late WebViewController _webController;
   late final GlobalKey _menuKey = GlobalKey();
@@ -40,22 +66,52 @@ class _MainScreenState extends State<MainScreen>
     return false;
   }
   late bool loadingApp=true;
+
   @override
   initState(){
+    super.initState();
+    if (Platform.isAndroid) {
+      WebView.platform = SurfaceAndroidWebView();
+    }
     if(widget.lang=="ar")
       {
-         url="https://nextlevelkw.com/?lang=ar";
+        appName="القائمة الرئيسية";
+         url="https://nextlevelkw.com/index.php/home-mob?lang=ar";
+          mainPage ="الصفحة الرئيسية ";
+          aboutUs ="من نحن";
+
+          courses ="الدورات التدريبية ";
+          shop ="المتجر";
+          contact ="اتصل بنا ";
+       aboutUsUrl ="https://nextlevelkw.com/index.php/about/?lang=ar";
+         coursesUrl ="https://nextlevelkw.com/index.php/courses-2/?lang=ar";
+      shopUrl ="https://nextlevelkw.com/index.php/shop-3/?lang=ar";
+        contactUrl ="https://nextlevelkw.com/index.php/contact/?lang=ar";
+
       }
     else if(widget.lang=="en")
       {
-        url="https://nextlevelkw.com";
+        url="https://nextlevelkw.com/index.php/home-mob/";
+         appName="Main Menu";
+        mainPage ="Home ";
+        aboutUs ="About Us";
+        courses ="Courses ";
+        shop ="Shop";
+        contact ="Contact Us";
+
+        aboutUsUrl ="https://nextlevelkw.com/index.php/about";
+        coursesUrl ="https://nextlevelkw.com/index.php/courses-2";
+        shopUrl ="https://nextlevelkw.com/index.php/shop-3";
+        contactUrl ="https://nextlevelkw.com/index.php/contact";
       }
 
   }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'App Title',
+
+
+      title: "NextLevel",
       theme: ThemeData(
         brightness: Brightness.light,
         /* light theme settings */
@@ -73,6 +129,102 @@ class _MainScreenState extends State<MainScreen>
       home: WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
+          appBar: AppBar(title: const Text("Next Level")
+          ,backgroundColor: const Color(0xFF008E1E)),
+          drawer: Drawer(
+            backgroundColor:const Color(0xFF008E1E) ,
+
+            // Add a ListView to the drawer. This ensures the user can scroll
+            // through the options in the drawer if there isn't enough vertical
+            // space to fit everything.
+            child: ListView(
+
+              // Important: Remove any padding from the ListView.
+              padding: EdgeInsets.zero,
+              children: [
+                 DrawerHeader(
+
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF008E1E),
+                  ),
+                  child: Text(appName),
+                ),
+                ListTile(
+                  title:  Text(mainPage),
+                  onTap: () {
+                    // Update the state of the app
+                    // ...
+                    // Then close the drawer
+
+                    _webController.loadUrl(
+                        url);
+
+                  },
+                ),
+                ListTile(
+                  title:  Text(aboutUs),
+                  onTap: () {
+
+
+                    // Update the state of the app
+                    // ...
+                    // Then close the drawer
+
+                    _webController.loadUrl(
+                        aboutUsUrl);
+
+
+                  },
+                ),
+                ListTile(
+                  title:  Text(courses),
+                  onTap: () {
+
+
+                    // Update the state of the app
+                    // ...
+                    // Then close the drawer
+
+                    _webController.loadUrl(
+                        coursesUrl);
+
+
+                  },
+                ),
+                ListTile(
+                  title:  Text(shop),
+                  onTap: () {
+
+
+                    // Update the state of the app
+                    // ...
+                    // Then close the drawer
+
+                    _webController.loadUrl(
+                        shopUrl);
+
+
+                  },
+                ),
+                ListTile(
+                  title:  Text(contact),
+                  onTap: () {
+
+
+                    // Update the state of the app
+                    // ...
+                    // Then close the drawer
+
+                    _webController.loadUrl(
+                        coursesUrl);
+
+
+                  },
+                ),
+
+              ],
+            ),
+          ),
           body: Row(
             children: [
               Expanded(
@@ -82,11 +234,13 @@ class _MainScreenState extends State<MainScreen>
                     WebView(
                       javascriptMode: JavascriptMode.unrestricted,
                       initialUrl: url,
-                      debuggingEnabled: true,
+                      gestureNavigationEnabled: true,
+
                       onWebViewCreated: (WebViewController webViewController) {
                         setState(() {
                           _webController = webViewController;
-                          _webController.clearCache();
+
+
                         });
                       },
                       onPageStarted: (String url) async {},
@@ -139,51 +293,38 @@ class _MainScreenState extends State<MainScreen>
                         }
                       },
                     ),
-                    Positioned(
-                      top: 50,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Row(
-                          children: [
-                            const Text(
-                              'Lang',
-                              style: TextStyle(
-                                fontSize: 15.0, // insert your font size here
-                              ),
-                            ),
 
-                            PopupMenuButton(
-                                key: _menuKey,
-                                itemBuilder: (_) => <PopupMenuItem<String>>[
-                                      const PopupMenuItem<String>(
-                                          child: Text('ar'), value: 'ar'),
-                                      const PopupMenuItem<String>(
-                                          child: Text('en'), value: 'en'),
-                                      const PopupMenuItem<String>(
-                                          child: Text('ref'), value: 'ref'),
-                                    ],
-                                onSelected: (String val) {
-                                  if (val == 'ar') {
-                                    _webController.loadUrl(
-                                        'https://nextlevelkw.com/?lang=ar');
-                                  } else if (val == 'en') {
-                                    _webController
-                                        .loadUrl('https://nextlevelkw.com');
-                                  } else if (val == 'ref') {
-                                    _webController.reload();
-                                  }
-                                })
-                          ],
-                        ),
-                      ),
-                    ),
                     Visibility(
                       visible: loadingApp,
                       child: Container(
-                        color: Colors.white,
+                        decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: [  Color(0xFFD9D9D9), Color(0xffffffff)],transform: GradientRotation(35.0))
+                        ),
                         height: MediaQuery.of(context).size.height,
                         width: MediaQuery.of(context).size.width,
-                        child: Center(child: Image.network("https://nextlevelkw.com/wp-content/uploads/2022/01/logo-01-01.png",scale: 0.3,)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(40.0),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: MediaQuery.of(context).size.height-(80*(MediaQuery.of(context).size.height))/100,
+                              ),
+                              Center(child: Image.asset("images/logo.png")),
+                        SpinKitFadingCircle(
+                          itemBuilder: (BuildContext context, int index) {
+                            return DecoratedBox(
+                              decoration: BoxDecoration(
+                                color: index.isEven ? Colors.green : Colors.green,
+                              ),
+                            );
+                          },
+                        )
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -196,3 +337,4 @@ class _MainScreenState extends State<MainScreen>
     );
   }
 }
+
