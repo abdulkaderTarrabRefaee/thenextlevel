@@ -1,6 +1,6 @@
 # thenextlevel
 
-thenextlevel
+The Next Level
 
 ## Getting Started
 
